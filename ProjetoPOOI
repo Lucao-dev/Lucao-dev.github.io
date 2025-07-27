@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Evolução de Personagem (RPG) - POO I</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            color: #334155; /* Slate gray text */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1, h2, h3, h4 {
+            color: #1a202c; /* Darker text for headings */
+            font-weight: 700;
+        }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 2rem; }
+        h4 { font-size: 1.75rem; }
+        p {
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        a {
+            color: #3b82f6; /* Blue for links */
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+        a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* More rounded corners */
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Stronger shadow */
+            border: 1px solid #e2e8f0; /* Subtle border */
+        }
+        .code-block {
+            background-color: #2d3748; /* Darker background for code */
+            color: #e2e8f0; /* Light text for code */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        ul, ol {
+            list-style-position: inside;
+            margin-left: 0; /* Reset default margin */
+            margin-bottom: 1rem;
+        }
+        ul li {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        ol li {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .button-primary {
+            display: inline-block;
+            background-color: #4f46e5; /* Indigo */
+            color: white;
+            font-weight: 600;
+            padding: 0.8rem 1.8rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .button-primary:hover {
+            background-color: #4338ca; /* Darker indigo */
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        .button-secondary {
+            display: inline-block;
+            background-color: #10b981; /* Emerald */
+            color: white;
+            font-weight: 600;
+            padding: 0.8rem 1.8rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .button-secondary:hover {
+            background-color: #059669; /* Darker emerald */
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        @media (max-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: 1fr; /* Stack columns on small screens */
+            }
+            h1 { font-size: 2.25rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.5rem; }
+            h4 { font-size: 1.25rem; }
+            .section-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-10 shadow-xl rounded-b-2xl">
+        <div class="container text-center">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-3 tracking-tight">Sistema de Evolução de Personagem</h1>
+            <p class="text-2xl md:text-3xl font-light opacity-90">Projeto Final de Programação Orientada a Objetos I</p>
+            <p class="text-lg md:text-xl font-light mt-4 opacity-80">Instituto Federal de Goiás, Campus Uruaçu</p>
+            <p class="text-lg md:text-xl font-light opacity-80">Professor: Davi Taveira Alencar Alarcão</p>
+        </div>
+    </header>
+
+    <main class="container py-12">
+        <!-- 1. Introdução e Objetivos -->
+        <section id="introduction" class="section-card">
+            <h2 class="text-4xl font-bold mb-6 text-center">1. Introdução e Objetivos do Projeto</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-8">Este projeto é a culminação de nossos estudos em Programação Orientada a Objetos (POO), com foco na aplicação prática de conceitos essenciais como classes abstratas, interfaces e tratamento de exceções. Nosso objetivo principal é ir além da teoria, desenvolvendo um sistema funcional e justificando cada decisão de design.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-3 text-blue-700">O Que Esperamos Demonstrar?</h3>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Aplicação de Classes Abstratas para hierarquias flexíveis.</li>
+                        <li>Uso de Interfaces para definir contratos de comportamento.</li>
+                        <li>Implementação robusta de Tratamento de Exceções.</li>
+                        <li>Capacidade de justificar escolhas de design e arquitetura.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-3 text-blue-700">Nosso Sistema RPG</h3>
+                    <p class="text-gray-700">O "Sistema de Evolução de Personagem" permitirá aos usuários criar, gerenciar e evoluir diferentes tipos de personagens de RPG. Ele simulará a progressão de habilidades, combates e interações, tudo isso com um gerenciamento de erros que garante uma experiência de jogo fluida e sem interrupções inesperadas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Fundamentos Teóricos -->
+        <section id="theory" class="section-card">
+            <h2 class="text-4xl font-bold mb-6 text-center">2. Fundamentos Teóricos: Os Pilares do Nosso Sistema</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-8">Aqui, detalhamos os conceitos de POO que formam a espinha dorsal do nosso sistema RPG. Compreender esses fundamentos é crucial para entender a lógica por trás de nossas implementações.</p>
+
+            <div class="space-y-10">
+                <!-- Classes Abstratas -->
+                <div>
+                    <h3 class="text-3xl font-bold mb-4 text-indigo-700">2.1. Classes Abstratas e Interfaces: Abstração em Ação</h3>
+                    <h4 class="text-2xl font-semibold mb-3">O Poder das Classes Abstratas</h4>
+                    <p>Classes abstratas são como projetos incompletos para outras classes. Elas não podem ser usadas diretamente, mas fornecem uma base comum e métodos que suas "filhas" (subclasses) devem obrigatoriamente implementar. Isso garante uma estrutura consistente, ao mesmo tempo que permite flexibilidade para comportamentos específicos.</p>
+                    <div class="grid md:grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <h5 class="text-xl font-medium mb-2 text-gray-800">Por que Usá-las?</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Definem uma interface comum para subclasses.</li>
+                                <li>Forçam uma estrutura e comportamento padrão.</li>
+                                <li>Permitem o reuso de código entre classes relacionadas.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="text-xl font-medium mb-2 text-gray-800">Regras Essenciais:</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Declaradas com `abstract`.</li>
+                                <li>Não podem ser instanciadas diretamente.</li>
+                                <li>Podem ter métodos `abstract` (sem corpo) e concretos.</li>
+                                <li>Subclasses concretas devem implementar todos os métodos abstratos.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interfaces -->
+                <div>
+                    <h4 class="text-2xl font-semibold mb-3">Interfaces: O Contrato de Comportamento</h4>
+                    <p>Interfaces definem um "contrato" de métodos que uma classe deve seguir. Elas são puramente sobre comportamento – o que uma classe PODE fazer, não o que ela É. Isso permite que classes totalmente diferentes compartilhem uma mesma "habilidade" ou "capacidade", promovendo um design mais flexível.</p>
+                    <div class="grid md:grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <h5 class="text-xl font-medium mb-2 text-gray-800">Contratos e Habilidades:</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Definem um conjunto de métodos que classes implementadoras prometem fornecer.</li>
+                                <li>Permitem que classes diversas compartilhem uma funcionalidade comum.</li>
+                                <li>Promovem a flexibilidade e a extensibilidade do sistema.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="text-xl font-medium mb-2 text-gray-800">Como Unem Classes Diferentes?</h5>
+                            <p class="text-gray-700">Ao implementar a mesma interface, classes não relacionadas podem ser tratadas de forma uniforme. Por exemplo, um `Guerreiro` e um `Mago` podem ambos implementar uma interface `Atacavel`, permitindo que o sistema de jogo chame o método `atacar()` em qualquer um, sem se preocupar com o tipo específico.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Polimorfismo -->
+                <div>
+                    <h4 class="text-2xl font-semibold mb-3">Polimorfismo: Muitas Formas, Uma Interação</h4>
+                    <p>Polimorfismo é a capacidade de um objeto assumir muitas formas. Em POO, isso significa que objetos de diferentes classes podem ser tratados como objetos de um tipo comum (geralmente uma classe abstrata ou interface). Essa "mágica" simplifica o código, tornando-o mais genérico e fácil de manter.</p>
+                    <p class="text-gray-700">Quando programamos para uma interface ou classe abstrata, podemos escrever código que opera no tipo comum, mesmo que o objeto real em tempo de execução seja uma subclasse ou uma classe implementadora. O método correto para aquele objeto específico será executado automaticamente.</p>
+                </div>
+
+                <!-- Abstrata vs Interface -->
+                <div>
+                    <h4 class="text-2xl font-semibold mb-3">Classe Abstrata vs. Interface: A Escolha Estratégica</h4>
+                    <p>A decisão entre usar uma classe abstrata ou uma interface é fundamental para um bom design. Cada uma tem seu propósito:</p>
+                    <div class="grid md:grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <h5 class="text-xl font-medium mb-2 text-gray-800">Use Classe Abstrata Quando:</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>As classes são intimamente relacionadas ("é-um").</li>
+                                <li>Você quer compartilhar código e estado (variáveis).</li>
+                                <li>Precisa de uma implementação base padrão.</li>
+                                <li>A herança de implementação é mais importante.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="text-xl font-medium mb-2 text-gray-800">Use Interface Quando:</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Classes não relacionadas precisam de um comportamento comum.</li>
+                                <li>Você quer definir um contrato de funcionalidade.</li>
+                                <li>Precisa de herança múltipla de tipo.</li>
+                                <li>A herança de contrato (comportamento) é mais importante.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mt-4"><strong>Justificativa da escolha do nosso projeto:</strong> (Esta seção será preenchida com o raciocínio específico do seu projeto em seu site final, com base no seu `Relatório do Projeto`.)</p>
+                </div>
+            </div>
+
+            <!-- Tratamento de Exceções -->
+            <div class="mt-12">
+                <h3 class="text-3xl font-bold mb-4 text-indigo-700">2.2. Tratamento de Exceções: Construindo Software Robusto</h3>
+                <p>O tratamento de exceções é vital para criar software que não "quebra" facilmente. Ele permite que seu programa reaja a problemas inesperados (erros) de forma controlada, evitando falhas e oferecendo uma experiência mais suave ao usuário.</p>
+
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h4 class="text-2xl font-semibold mb-3">Hierarquia de Erros: `Error` vs. `Exception`</h4>
+                        <p class="text-gray-700">Em Java, `Throwable` é a raiz de todos os problemas. Ele se divide em:</p>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li><strong>`Error`:** Problemas graves, geralmente fora do controle da aplicação (ex: memória esgotada). Não devem ser capturados.</li>
+                            <li><strong>`Exception`:** Problemas recuperáveis que a aplicação pode e deve tratar (ex: arquivo não encontrado).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-semibold mb-3">Exceções Checadas vs. Não Checadas</h4>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li><strong>Checadas (`Checked`):</strong> O compilador OBRIGA você a tratar (com `try-catch` ou `throws`). Indicam problemas previsíveis, mas inevitáveis (ex: `IOException`).</li>
+                            <li><strong>Não Checadas (`Unchecked` - `RuntimeException`):</strong> O compilador NÃO OBRIGA a tratar. Indicam erros de programação (ex: `NullPointerException`). Se não tratadas, podem causar a falha do programa.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-2xl font-semibold mb-3 mt-8">Mecanismos de Tratamento: `try-catch-finally`</h4>
+                <p>A ferramenta principal para lidar com exceções. Permite isolar o código problemático e definir como reagir.</p>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li><strong>`try`:** Bloco de código que pode lançar uma exceção.</li>
+                    <li><strong>`catch`:** Captura e trata uma exceção específica. Um `try` pode ter múltiplos `catch`.</li>
+                    <li><strong>`finally`:** Código que SEMPRE será executado, ideal para limpeza de recursos.</li>
+                </ul>
+                <div class="code-block">
+                    <pre><code>try {
+    // Código que pode gerar uma exceção
+    // Ex: personagem.usarHabilidade("Bola de Fogo");
+} catch (ManaInsuficienteException e) {
+    // Tratamento específico para mana insuficiente
+    System.out.println("Erro de Habilidade: " + e.getMessage());
+} finally {
+    // Código que sempre será executado, ex: fechar conexão
+    System.out.println("Tentativa de habilidade finalizada.");
+}</code></pre>
+                </div>
+
+                <h4 class="text-2xl font-semibold mb-3 mt-8">Lançando Exceções: `throw` e `throws`</h4>
+                <p>Como o programa sinaliza que algo inesperado aconteceu:</p>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li><strong>`throw`:** Lança explicitamente uma instância de exceção. Usado dentro do método.
+                        <div class="code-block">
+                            <pre><code>if (saldo &lt; valor) {
+    throw new SaldoInsuficienteException("Saldo insuficiente para saque.");
+}</code></pre>
+                        </div>
+                    </li>
+                    <li><strong>`throws`:** Declara na assinatura do método que ele PODE lançar uma ou mais exceções checadas. Avisa quem chama o método para tratar.
+                        <div class="code-block">
+                            <pre><code>public void sacar(double valor) throws SaldoInsuficienteException {
+    // ...
+}</code></pre>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4 class="text-2xl font-semibold mb-3 mt-8">Criando Exceções Personalizadas</h4>
+                <p>Criar suas próprias exceções é uma prática recomendada para tornar seu código mais expressivo e fácil de manter. Elas fornecem mensagens de erro mais específicas e relevantes para o seu domínio.</p>
+                <div class="code-block">
+                    <pre><code>// Exemplo: Uma exceção checada personalizada para mana insuficiente
+public class ManaInsuficienteException extends Exception {
+    public ManaInsuficienteException(String message) {
+        super(message);
+    }
+}</code></pre>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">(Você incluirá seus próprios exemplos de exceção personalizada do seu código aqui.)</p>
+            </div>
+        </section>
+
+        <!-- 3. A Solução Prática -->
+        <section id="practical-solution" class="section-card">
+            <h2 class="text-4xl font-bold mb-6 text-center">3. A Solução Prática: Nosso Sistema de Evolução de Personagem (RPG)</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-8">Nesta seção, apresentamos a materialização dos conceitos teóricos: o nosso Sistema de Evolução de Personagem em Java.</p>
+
+            <h3 class="text-3xl font-bold mb-4 text-indigo-700">3.1. O Código (Aplicação em Java)</h3>
+            <p class="mb-6 text-gray-700">O código-fonte completo do nosso sistema está disponível publicamente em nosso repositório no GitHub. Explore a implementação de cada conceito!</p>
+            <p class="text-center mb-8">
+                <a href="[LINK DO SEU REPOSITÓRIO GITHUB]" target="_blank" class="button-primary">
+                    Acessar Código-Fonte no GitHub
+                </a>
+            </p>
+            <p class="mt-4 text-gray-700">Nosso sistema é uma aplicação Java funcional que demonstra o uso claro de:</p>
+            <ul class="list-disc pl-5 text-gray-700">
+                <li><strong>1 Classe Abstrata:</strong> (ex: `Personagem.java`)</li>
+                <li><strong>1 Interface:</strong> (ex: `Habilidade.java`)</li>
+                <li><strong>2 Classes que herdam da classe abstrata e/ou implementam a interface:</strong> (ex: `Guerreiro.java`, `Mago.java`)</li>
+                <li><strong>Blocos `try-catch`:</strong> Usados para lidar com erros potenciais de forma elegante.</li>
+                <li><strong>2 Exceções Personalizadas:</strong> (ex: `ManaInsuficienteException.java`, `NivelInvalidoException.java`)</li>
+            </ul>
+
+            <h4 class="text-2xl font-semibold mb-4 mt-8">Trechos de Código Ilustrando a Teoria:</h4>
+            <p class="text-gray-700">Abaixo, destacamos exemplos diretos do nosso código que aplicam os conceitos discutidos. Isso ajuda a visualizar a teoria em prática.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-6">
+                <div>
+                    <h5 class="text-xl font-medium mb-2 text-gray-800">Polimorfismo em Ação:</h5>
+                    <p class="text-gray-700">Veja como tratamos diferentes tipos de personagens de forma unificada.</p>
+                    <div class="code-block">
+                        <pre><code>// Exemplo do nosso projeto:
+// Lista de personagens, demonstrando comportamento polimórfico
+List&lt;Personagem&gt; personagens = new ArrayList&lt;&gt;();
+personagens.add(new Guerreiro("Arthur", 100));
+personagens.add(new Mago("Merlin", 80));
+
+for (Personagem p : personagens) {
+    System.out.println(p.getNome() + " ataca!");
+    p.atacar(); // Chama o método de ataque específico para Guerreiro ou Mago
+}</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-xl font-medium mb-2 text-gray-800">Implementação de Classe Abstrata:</h5>
+                    <p class="text-gray-700">A base comum para todos os nossos personagens.</p>
+                    <div class="code-block">
+                        <pre><code>// Personagem.java (classe abstrata)
+public abstract class Personagem {
+    protected String nome;
+    protected int saude;
+
+    public Personagem(String nome, int saude) {
+        this.nome = nome;
+        this.saude = saude;
+    }
+
+    public abstract void atacar(); // Método abstrato
+
+    public void receberDano(int dano) { // Método concreto
+        this.saude -= dano;
+        System.out.println(nome + " recebeu " + dano + " de dano. Saúde: " + saude);
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-6">
+                <div>
+                    <h5 class="text-xl font-medium mb-2 text-gray-800">Implementação de Interface:</h5>
+                    <p class="text-gray-700">Definindo capacidades que diferentes personagens podem ter.</p>
+                    <div class="code-block">
+                        <pre><code>// Habilidade.java (interface)
+public interface Habilidade {
+    void usarHabilidade(String nomeHabilidade);
+}</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-xl font-medium mb-2 text-gray-800">Uso de Exceção Personalizada:</h5>
+                    <p class="text-gray-700">Como lidamos com situações inesperadas de forma controlada.</p>
+                    <div class="code-block">
+                        <pre><code>// Mago.java (demonstrando exceção personalizada)
+public class Mago extends Personagem implements Habilidade {
+    private int mana;
+
+    public Mago(String nome, int saude, int mana) {
+        super(nome, saude);
+        this.mana = mana;
+    }
+
+    @Override
+    public void atacar() {
+        System.out.println(nome + " conjura um feitiço básico!");
+    }
+
+    @Override
+    public void usarHabilidade(String nomeHabilidade) {
+        try {
+            if (mana &lt; 20) {
+                throw new ManaInsuficienteException("Mana insuficiente para conjurar " + nomeHabilidade);
+            }
+            mana -= 20;
+            System.out.println(nome + " usou " + nomeHabilidade + ". Mana restante: " + mana);
+        } catch (ManaInsuficienteException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
+}
+
+// ManaInsuficienteException.java (exceção personalizada)
+public class ManaInsuficienteException extends Exception {
+    public ManaInsuficienteException(String message) {
+        super(message);
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mt-4 text-center">(Substitua estes exemplos pelos seus próprios trechos de código reais.)</p>
+
+            <h3 class="text-3xl font-bold mb-4 mt-12 text-indigo-700">3.2. Relatório do Projeto</h3>
+            <p class="mb-6 text-gray-700">Nosso relatório detalha o processo de desenvolvimento, as decisões de design tomadas e os desafios superados durante a criação do Sistema de Evolução de Personagem.</p>
+            <p class="text-center mb-8">
+                <a href="[LINK DO SEU RELATÓRIO DO PROJETO]" target="_blank" class="button-secondary">
+                    Acessar Relatório do Projeto
+                </a>
+            </p>
+
+            <h4 class="text-2xl font-semibold mb-4">Trechos do Nosso Relatório (Decisões Chave de Design):</h4>
+            <ul class="list-disc pl-5 text-gray-700 space-y-3">
+                <li><strong>Sobre a Classe Abstrata `Personagem`:</strong> Decidimos que ela deveria ser abstrata para fornecer uma base comum (nome, saúde) e um método `atacar()` abstrato, forçando subclasses como `Guerreiro` e `Mago` a implementar seu próprio ataque, garantindo polimorfismo.</li>
+                <li><strong>Sobre a Interface `Habilidade`:</strong> Criamos esta interface para definir um "contrato" de comportamento (`usarHabilidade`). Isso permite que classes diversas (não necessariamente na mesma hierarquia de herança) implementem a capacidade de usar habilidades, promovendo flexibilidade.</li>
+                <li><strong>Sobre as Exceções Personalizadas (`ManaInsuficienteException`, `NivelInvalidoException`):</strong> Optamos por exceções personalizadas para fornecer mensagens de erro mais claras e específicas do domínio do RPG, facilitando a depuração e o entendimento do código.</li>
+            </ul>
+            <p class="text-sm text-gray-600 mt-4 text-center">(Você substituirá estes exemplos pelos seus próprios detalhes do relatório.)</p>
+        </section>
+
+        <!-- 4. Vídeo de Apresentação e Defesa -->
+        <section id="video-presentation" class="section-card">
+            <h2 class="text-4xl font-bold mb-6 text-center">4. Vídeo de Apresentação e Defesa</h2>
+            <p class="mb-6 text-lg text-center max-w-3xl mx-auto">Assista à nossa apresentação em vídeo, onde detalhamos a ideia do projeto, os conceitos aplicados, o processo de desenvolvimento e uma demonstração prática do sistema.</p>
+            <div class="aspect-w-16 aspect-h-9 w-full rounded-xl overflow-hidden shadow-2xl">
+                <!-- Placeholder para o vídeo. Substitua pelo código de incorporação do seu vídeo (YouTube, Vimeo, etc.) -->
+                <iframe class="w-full h-96 rounded-xl" src="[LINK DE INCORPORAÇÃO DO SEU VÍDEO]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p class="text-sm text-gray-600 mt-4 text-center">(Substitua `[LINK DE INCORPORAÇÃO DO SEU VÍDEO]` pelo link de incorporação real do seu vídeo.)</p>
+
+            <h3 class="text-3xl font-bold mt-10 mb-4 text-indigo-700">Roteiro da Apresentação:</h3>
+            <ol class="list-decimal pl-5 text-gray-700 space-y-2">
+                <li><strong>Apresentação da Ideia (1-2 min):</strong> Introdução ao Sistema de Evolução de Personagem e seus objetivos.</li>
+                <li><strong>Visão Geral dos Conceitos (2 min):</strong> Explicação dos pilares teóricos (Classes Abstratas, Interfaces, Polimorfismo, Exceções) com auxílio do site.</li>
+                <li><strong>A História do Projeto (4-7 min):</strong> Detalhes do desenvolvimento, código Java (Entregável 2A) e decisões de design (Entregável 2B).</li>
+                <li><strong>Demonstração Rápida (1 min):</strong> Execução do programa e demonstração do tratamento de exceções.</li>
+                <li><strong>Conclusão (1 min):</strong> Principais aprendizados e reflexões sobre o projeto.</li>
+            </ol>
+        </section>
+
+        <!-- 5. Jornada de Aprendizado e Reflexões -->
+        <section id="learning-journey" class="section-card">
+            <h2 class="text-4xl font-bold mb-6 text-center">5. Jornada de Aprendizado e Reflexões</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-8">Este projeto foi uma experiência transformadora, solidificando nosso conhecimento teórico através da aplicação prática e superação de desafios.</p>
+            <ul class="list-disc pl-5 text-gray-700 space-y-3">
+                <li><strong>Desafios Enfrentados:</strong> (Descreva um desafio específico aqui, ex: "Um desafio significativo que enfrentamos foi projetar a hierarquia inicial de personagens e suas habilidades para garantir o uso adequado de classes abstratas e interfaces sem complexidade desnecessária. Resolvemos isso esboçando diferentes diagramas de classe e discutindo os prós e contras de cada abordagem antes de decidir nosso design atual.")</li>
+                <li><strong>Principais Aprendizados:</strong> (Descreva seus principais aprendizados aqui, ex: "O aprendizado mais significativo foi realmente entender <em>por que</em> e <em>quando</em> usar classes abstratas versus interfaces. Também ganhamos uma apreciação mais profunda pela importância das exceções personalizadas em tornar nosso código mais autodocumentado e fácil de manter. Este projeto solidificou nosso entendimento de como esses princípios de POO contribuem para a construção de software escalável e resiliente.")</li>
+            </ul>
+        </section>
+
+        <!-- Delivery Checklist -->
+        <section id="delivery-checklist" class="section-card bg-blue-50 border border-blue-200">
+            <h2 class="text-3xl font-bold mb-4 text-blue-800 text-center">Checklist de Entrega (Para seu uso interno)</h2>
+            <p class="text-blue-700 mb-6 text-center max-w-2xl mx-auto">Antes de postar o link no Moodle, verifiquem se o site de vocês possui, de forma clara e acessível, todos os itens abaixo:</p>
+            <ul class="list-none space-y-3 text-blue-800">
+                <li class="flex items-center">
+                    <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Toda a parte teórica e os exemplos práticos do Site Educacional.
+                </li>
+                <li class="flex items-center">
+                    <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Um link para o código-fonte completo (Entregável 2A). A recomendação é usar um repositório no GitHub e compartilhar o link público.
+                </li>
+                <li class="flex items-center">
+                    <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Um link para o Relatório do Projeto (Entregável 2B).
+                </li>
+                <li class="flex items-center">
+                    <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    O Vídeo de Apresentação (Entregável 3) incorporado na página, pronto para ser assistido.
+                </li>
+            </ul>
+            <p class="text-sm text-red-700 mt-6 text-center font-semibold"><strong>Atenção:</strong> A avaliação será feita exclusivamente com base no conteúdo acessível através do link enviado. Certifiquem-se de que todos os links estão funcionando e que o acesso é público antes de postar. Trabalhos com links quebrados ou incompletos não serão reavaliados após o prazo.</p>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8 mt-12 rounded-t-2xl shadow-inner">
+        <div class="container text-center text-sm opacity-90">
+            <p>&copy; 2025 Sistema de Evolução de Personagem (RPG). Todos os direitos reservados.</p>
+            <p>Desenvolvido por [Seus Nomes]</p>
+        </div>
+    </footer>
+</body>
+</html>
